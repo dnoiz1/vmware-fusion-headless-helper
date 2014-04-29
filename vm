@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# vmrun with fusion shits me up the wall.
+# i took a deep breath, 2 vodka redbulls and bashed it.
+
+VMRUN="/Applications/VMware Fusion.app/Contents/Library/vmrun"
+VMDIR="$HOME/Documents/Virtual Machines.localized"
+
+ACTION=$1
+shift 1
+VMNAME="$@"
+
+#echo $ACTION
+#echo $VMNAME
+
+function vmrun_start
+{
+	VM="$@"
+	if [[ "$(vmrun_find_running $VM)" != 0 ]]; then
+		echo 'VM already running'
+		exit
+	fi
+	echo "Starting $VMNAME..."
+	"$VMRUN" -T ws start "$VM" nogui
+}
+
+function vmrun_suspend
+{
+	VM="$@"
+	if [[ "$(vmrun_find_running $VM)" == 0 ]]; then
+		echo 'VM not running'
+		exit
+	fi
+	echo "Suspening $VMNAME..."
+	"$VMRUN" suspend "$VM"
+}
+
+function vmrun_list
+{
+	LIST=$("VMRUN" list)
+	ESCAPED_DIR=$(echo "$VMDIR" | sed 's/\//\\\//g' | sed 's/\./\\\./g')
+	echo "$LIST" | sed -n "s/$ESCAPED_DIR\/\(.*\)\.vmwarevm\/\(.*\)\.vmx/\2/p"
+	echo "$LIST" | head -n 1
+}
+
+function vmrun_find_running
+{
+	VM="$@"
+	echo $("$VMRUN" list | grep "$VM" | wc -l);
+}
+
+function vmrun_help
+{
+	echo "usage:"
+	echo "start a headless vm:"
+	echo "$ $0 start vmname"
+	echo "suspend a headless vm:"
+	echo "$ $0 stop vmname"
+	echo "list running vms"
+	echo "$ $0 list"
+	echo
+	echo "https://github.com/dnoiz1/vmware-fusion-headless-helper"
+	echo "author: Tim Noise <tim@drkns.net>"
+	echo
+}
+
+if [ -s $ACTION ]; then
+	vmrun_help
+	exit
+fi
+
+if [[ $ACTION == 'list' ]]; then
+	vmrun_list
+	exit
+fi
+
+if [ -s $VMNAME ]; then
+	echo 'specify a vm name'
+	exit
+fi
+
+if [ ! -d "$VMDIR/$VMNAME.vmwarevm" ]; then
+	echo 'vm not found'
+	exit
+fi
+
+VMX="$VMDIR/$VMNAME.vmwarevm/$VMNAME.vmx"
+
+if [ ! -f "$VMX" ]; then
+	echo 'vmx not found'
+	exit
+fi
+
+case $ACTION in
+	start)
+		vmrun_start $VMX
+		;;
+	stop)
+		vmrun_suspend $VMX
+		;;
+	suspend)
+		vmrun_suspend $VMX
+		;;
+	*)
+		vmrun_help
+		;;
+esac
