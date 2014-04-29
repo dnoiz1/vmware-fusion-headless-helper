@@ -4,11 +4,15 @@ VMWare Fusion is not very friendly sometimes.
 
 This wraps vmrun slightly for starting and stopping headless vm's from the command line using friendly names and not full paths
 
-Before:
-    /Applications/VMware Fusion.app/Contents/Library/vmrun start $HOME/Documents/Virtual\ Machines.localized/<vmname>.vmwarevm/<vmname>.vmx nogui
+Beforee:
+```
+/Applications/VMware Fusion.app/Contents/Library/vmrun start $HOME/Documents/Virtual\ Machines.localized/$vmname.vmwarevm/$vmname.vmx nogui
+```
 
 After:
-    vm start <vmname>
+```
+vm start $vmname
+```
 
 ## Features
 - start vms
@@ -32,13 +36,19 @@ After:
 ## Usage
 
 start a headless vm:
-    vm start <vmname>
+```
+vm start $vmname
+```
 
 suspend a headless vm:
-    vm stop <vmname>
+```
+vm stop $vmname
+```
 
 list running vms:
-    vm list
+```
+vm list
+```
 
 ## FAQ
 Q: Cant I already do all this stuff and more with vmrun ?
