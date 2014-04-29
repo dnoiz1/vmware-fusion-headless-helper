@@ -4,7 +4,7 @@ VMWare Fusion is not very friendly sometimes.
 
 This wraps vmrun slightly for starting and stopping headless vm's from the command line using friendly names and not full paths
 
-Beforee:
+Before:
 ```
 /Applications/VMware Fusion.app/Contents/Library/vmrun start $HOME/Documents/Virtual\ Machines.localized/$vmname.vmwarevm/$vmname.vmx nogui
 ```
