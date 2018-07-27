@@ -3,7 +3,7 @@
 # vmrun with fusion shits me up the wall.
 # i took a deep breath, 2 vodka redbulls and bashed it.
 
-VMRUN="/Applications/VMware Fusion.app/Contents/Library/vmrun"
+VMRUN="/Applications/VMware Fusion.app/Contents/Public/vmrun"
 VMDIR="$HOME/Documents/Virtual Machines.localized"
 
 ACTION=$1
@@ -37,7 +37,7 @@ function vmrun_suspend
 
 function vmrun_list
 {
-	LIST=$("VMRUN" list)
+	LIST=$("$VMRUN" list)
 	ESCAPED_DIR=$(echo "$VMDIR" | sed 's/\//\\\//g' | sed 's/\./\\\./g')
 	echo "$LIST" | sed -n "s/$ESCAPED_DIR\/\(.*\)\.vmwarevm\/\(.*\)\.vmx/\2/p"
 	echo "$LIST" | head -n 1
